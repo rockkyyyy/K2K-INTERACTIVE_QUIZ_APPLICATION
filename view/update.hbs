@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+     <h4 style="text-align: center;">Format for QuizID - 1 , 2 , 3.... | questionid- 1q1 ,1q2 , 2q1... | optionID - 1q1a , 1q1b, 2q1a..</h4>
+       
+    <div class="">
+      <form action="/updatesearch">
+   <h3>SEARCH QUIZ</h3>
+   
+    <hr>
+ 
+    <label for="qz-id"><b>Quiz Id</b></label>
+    <input type="text" placeholder="Enter quiz Id to search" name="quizid" id="quizid" required>
+   
+    <button type="submit" class="registerbtn">SEACRH QUIZ</button>
+    <a href="/index" style="color:black">BACK TO HOME PAGE</a>
+
+    <br>
+   
+ {{#if umesg}}
+     <h3>Data updated!</h3>
+     {{/if}}
+
+     
+     {{#if mesg2}}
+     <h3>Data Not Found!</h3>
+     {{/if}}
+    </form>
+  </div>
+
+<!--Search form design end-->
+
+{{#if mesg1}}
+       <div class="container">
+       <form action="/updatequiz"  >
+   <h3>UPDATE STUDENT</h3>
+   
+    <hr>
+{{#data}}
+    <label for="name"><b>Quiz name</b></label>
+    <input type="text" placeholder="Enter Quiz Name" name="name" value="{{quiz_name}}" id="name" required>
+
+    <label for="desc"><b>Description</b></label>
+    <input type="text" placeholder="Enter Description" name="Description" value="{{quiz_desc}}" id="Description" required>
+
+    <label for="qz-id"><b>Quiz Id</b></label>
+    <input type="text" placeholder="Enter quiz Id" name="quizid" value="{{quiz_id}}" id="quizid" required readonly>
+   
+  <div class="gender_g">
+     <strong>Level of quiz</strong>
+     <input type="radio" name="level" id="" value="EASY"> Easy
+     <input type="radio" name="level" id=""  value="HARD">  Hard
+
+     </div>
+    <button type="submit" class="registerbtn">UPDATE QUIZ</button>
+
+  
+     
+{{/data}}
+  
+    <a href="/index" style="color:black">BACK TO HOME PAGE</a> <br>
+     
+    
+</form>
+</div>
+     
+      {{/if}}      
+</body>
+</html>

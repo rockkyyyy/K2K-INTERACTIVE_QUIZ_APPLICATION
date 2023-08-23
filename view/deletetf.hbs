@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <h4 style="text-align: center;">Format for QuizID - 1 , 2 , 3..</h4>
+       
+    <div class="container">
+      <form action="/removetf">
+   <h3>DELETE QUESTION</h3>
+   
+    <hr>
+ 
+     <label for="Qname"><b>Question </b></label>
+    <input type="text" placeholder=" Copy and paste the question here that you want to delete" name="Qname" id="Qname" required>
+
+    <button type="submit" class="registerbtn">DELETE QUESTION</button>
+    <a href="/index" style="color:black">BACK TO HOME PAGE</a>
+
+    <br>
+    {{#if mesg1}}
+    <h3>Data deleted!</h3>
+    {{/if}}
+
+     {{#if mesg2}}
+    <h3>Not found!</h3>
+    {{/if}}
+
+      {{#if mesg3}}
+    <h3>1ST delete all the options in this question</h3>
+     <a href="/deleteoption" style="color:black">delete options</a>
+    {{/if}}
+    </form>
+  </div>
+</body>
+</html>

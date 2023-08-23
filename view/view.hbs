@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+<style>
+  body {
+      margin: 0;
+      padding: 0;
+      background-size: 400% 400%;
+      animation: gradientShift 10s infinite;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background-color: darkslategray;
+      color: #FFFFFF;
+      background-image: url('livingroom.jpg');
+      background-size: cover;
+      backdrop-filter: blur(8px); /* Apply the blur effect to the background */
+    }
+</style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" >
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+</head>
+<body>
+ 
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    
+      <div class="modal-body">
+      <table class="table">
+  <thead>
+    <tr>
+      
+      <th scope="col">QUOZ Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">QUIZ Id</th>
+       <th scope="col">LEVEL</th>
+    </tr>
+  </thead>
+  <tbody>
+      {{#data}}
+    <tr>
+     
+      <td>{{quiz_name}}</td>
+      <td>{{quiz_desc}}</td>
+      <td>{{quiz_id}}</td>
+      <td>{{level}}</td>
+    </tr>
+    {{/data}}
+   
+    
+  </tbody>
+</table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" ><a href="/index" style="color:black">BACK TO HOME PAGE</a></button>
+     </div>
+       <br>
+    </div>
+  </div>
+    
+</div>
+</body>
+<script>$(".modal").modal("show")</script>
+</html>

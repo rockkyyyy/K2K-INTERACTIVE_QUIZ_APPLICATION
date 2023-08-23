@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <h4 style="text-align: center;">Format for QuizID - 1 , 2 , 3.... | questionid- 1q1 ,1q2 , 2q1... | optionID - 1q1a , 1q1b, 2q1a..</h4>
+       
+    <div class="container">
+      <form action="/removequiz">
+   <h3>DELETE QUIZ</h3>
+   
+    <hr>
+ 
+    <label for="qz-id"><b>Quiz Id</b></label>
+    <input type="text" placeholder="Enter quiz Id" name="quizid" id="quizid" required>
+   
+    <button type="submit" class="registerbtn">DELETE QUIZ</button>
+    <a href="/index" style="color:black">BACK TO HOME PAGE</a>
+
+    <br>
+    {{#if mesg1}}
+    <h3>Data deleted!</h3>
+    {{/if}}
+
+     {{#if mesg2}}
+    <h3>Not found!</h3>
+    {{/if}}
+
+     {{#if mesg3}}
+    <h3>1ST delete all the questions in this quiz</h3>
+     <a href="/deletequestion" style="color:black">delete questions</a>
+    {{/if}}
+    </form>
+  </div>
+</body>
+</html>

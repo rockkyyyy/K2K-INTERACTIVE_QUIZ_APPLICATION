@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Viewer</title>
+    <style>
+        /* Add your CSS styling here */
+        
+        body {
+      margin: 0;
+      padding: 0;
+      background-size: 400% 400%;
+      animation: gradientShift 10s infinite;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background-color: darkslategray;
+      color: #FFFFFF;
+      background-image: url('livingroom.jpg');
+      background-size: cover;
+      backdrop-filter: blur(8px); /* Apply the blur effect to the background */
+    }
+
+.quiz-container {
+    border: 1px solid #444; /* Dark border color */
+    padding: 20px;
+    margin-top: 20px;
+    max-width: 600px;
+    background-color: #0c0707c7; /* Darker background color */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+
+.quiz-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #FFD700; /* Gold text color */
+}
+
+.quiz-description {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #AAAAAA; /* Light gray text color */
+}
+
+.question {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color:antiquewhite
+}
+
+.option {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #444; /* Dark border color */
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #292929; /* Darker background color */
+    color: #FFFFFF; /* Light text color */
+}
+
+.correct-option {
+    font-weight: bold;
+}
+
+.no-questions {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FF0000; /* Red text color */
+    margin-top: 20px;
+}
+
+.button {
+    background-color: #04AA6D;
+    color: #FFFFFF;
+    margin: 8px 0;
+    padding: 6px 8px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.9;
+    background-color: #0E7C58; /* Darker green for button */
+}
+
+.button:hover {
+    opacity: 5;
+}
+
+#quizId {
+    padding: 10px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #292929; /* Darker background color */
+    color: #FFFFFF; /* Light text color */
+}
+
+    </style>
+</head>
+<body>
+
+
+    
+    <h1>Quiz Viewer</h1>
+    <label for="quizId">Enter Quiz ID:</label>
+    <input type="text" id="quizId" placeholder="Enter quiz ID">
+    <!-- button type="button" class="button" ><a href="" style="color: #FFFFFF; text-decoration: none;" >view results</a></button> -->
+    
+    <button onclick="loadQuiz()" id="load-btn" class="button">Load Quiz</button>
+    <button id="makeLiveButton" class="button">Make Live</button>
+    <button id="stopLiveButton" class="button" style="display: none;">Stop Live</button>
+    <button id="prevButton" class="button" style="display: none;" onclick="prevQuestion()">Previous</button>
+    <button id="nextButton" class="button" style="display: none;" onclick="nextQuestion()">Next</button>
+
+    <div id="quizContainer" class="quiz-container"></div>
+
+    <script>
+        const optionColors = ['darkgoldenrod', 'green', 'purple', 'red'];
+        let currentColorIndex = 0;
+
+        function getNextColor() {
+            const color = optionColors[currentColorIndex];
+            currentColorIndex = (currentColorIndex + 1) % optionColors.length;
+            return color;
+        }
+
+        let currentQuestionIndex = 0;
+        let questions = [];
+
+        function loadQuiz() {
+            currentQuestionIndex = 0;
+            const quizId = document.getElementById("quizId").value;
+            const apiUrl = `http://localhost:3000/api/quizzes/${quizId}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    questions = data.questions || [];
+                    updateQuestionDisplay();
+                })
+                .catch(error => displayQuizError());
+        }
+
+        function updateQuestionDisplay() {
+            const quizContainer = document.getElementById("quizContainer");
+            quizContainer.innerHTML = "";
+
+            const currentQuestion = questions[currentQuestionIndex];
+            if (currentQuestion) {
+                const questionPar = document.createElement("div");
+                questionPar.className = "question";
+                questionPar.innerText = `Q: ${currentQuestion.question}`;
+                quizContainer.appendChild(questionPar);
+
+                const options = [
+                    currentQuestion.option_1,
+                    currentQuestion.option_2,
+                    currentQuestion.option_3,
+                    currentQuestion.option_4
+                ];
+
+                for (const optionText of options) {
+                    if (optionText) {
+                        const optionPar = document.createElement("div");
+                        optionPar.className = "option";
+                        optionPar.innerText = optionText;
+                        optionPar.style.backgroundColor = getNextColor();
+                        quizContainer.appendChild(optionPar);
+                    }
+                }
+
+                // Show/hide next and previous buttons based on question index
+                document.getElementById("prevButton").style.display = currentQuestionIndex > 0 ? "inline-block" : "none";
+                document.getElementById("nextButton").style.display = currentQuestionIndex < questions.length - 1 ? "inline-block" : "none";
+            } else {
+                const noQuestionsPar = document.createElement("div");
+                noQuestionsPar.className = "no-questions";
+                noQuestionsPar.innerText = "No questions available for this quiz.";
+                quizContainer.appendChild(noQuestionsPar);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                updateQuestionDisplay();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                updateQuestionDisplay();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUIZ MANAGEMENT</title>
+    <style>
+      body {
+      margin: 0;
+      padding: 0;
+      background-size: 400% 400%;
+      animation: gradientShift 10s infinite;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background-color: darkslategray;
+      color: #FFFFFF;
+      background-image: url('livingroom.jpg');
+      background-size: cover;
+      backdrop-filter: blur(8px); /* Apply the blur effect to the background */
+    }
+        
+        h1, h4 {
+            text-align: center;
+            margin: 20px 0;
+             color: rgb(0, 0, 0);
+        }
+        
+        .menu, .live {
+            display: flex;
+            justify-content: space-around;
+            background-color: #130606cc;
+            padding: 10px 0;
+        }
+        
+        .menu a, .live a {
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .menu a:hover, .live a:hover {
+            background-color: #850ce9da;
+        }
+        
+        .live a {
+            font-size: 24px;
+            color: #12bd1b;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚛ QUIZ MANAGEMENT ⚛</h1>
+    <h4>Format for Quiz ID - 1, 2, 3..</h4>
+   <br> <div class="menu">
+        <a href="/add">ADD QUIZ</a>
+        <a href="/search">SEARCH QUIZ</a>
+       <a href="/delete">DELETE QUIZ</a>
+        <a href="/view">VIEW QUIZ</a>
+    </div>
+    
+    <br><br><br>
+    
+    <div class="menu">
+        <a href="/addtf">ADD TRUE OR FALSE QUESTION</a>
+       <a href="/deletetf">DELETE AN EXISTING QUESTION</a>
+        <a href="/viewquestion">VIEW ALL EXISTING QUESTIONS</a>
+    </div>
+    
+    <br><br><br>
+    
+    <div class="menu">
+        <a href="/addmcq">ADD MCQ TYPE QUESTION</a>
+       <a href="/deletemcq">DELETE MCQ TYPE QUESTION</a>
+        <a href="/viewmcq">VIEW MCQ TYPE QUESTIONS</a>
+    </div>
+    
+    <br><br><br>
+    
+    <div class="live">
+        <a href="/quizview">Make the quiz live</a>
+    </div>
+<br>
+ <div class="live">
+        <a href="/viewresults">View Results</a>
+    </div>
+    
+</body>
+</html>

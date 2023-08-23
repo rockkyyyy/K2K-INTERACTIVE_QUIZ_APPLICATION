@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <link rel="stylesheet" href="styles.css"> -->
+  <title>Quiz App</title>
+
+  <style>
+  body {
+      margin: 0;
+      padding: 0;
+      background-size: 400% 400%;
+      animation: gradientShift 10s infinite;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background-color: darkslategray;
+      color: #FFFFFF;
+      background-image: url('livingroom.jpg');
+      background-size: cover;
+      backdrop-filter: blur(8px); /* Apply the blur effect to the background */
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      background-color:#000000c2; /* Darker background color */
+      padding: 20px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      border: 1px solid #444; /* Dark border color */
+      margin-top: 20px;
+    }
+
+    .quiz-header {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #FFD700; /* Gold text color */
+    }
+
+    .quiz-description {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #AAAAAA; /* Light gray text color */
+    }
+
+    .question {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .option-label {
+    padding: 10px;
+    margin: 10px 0; /* Increased margin between options */
+    border: 1px solid #444;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #292929;
+    color: #FFFFFF;
+  }
+
+
+    .option-1 {
+      background-color: darkgoldenrod;
+      padding: 10px;
+    margin: 10px 0; /* Increased margin between options */
+    
+    }
+
+    .option-2 {
+      background-color: green;
+      padding: 10px;
+    margin: 10px 0; /* Increased margin between options */
+    
+    }
+
+    .option-3 {
+      background-color: purple;
+      padding: 10px;
+    margin: 10px 0; /* Increased margin between options */
+    
+    }
+
+    .option-4 {
+      background-color: red;
+      padding: 10px;
+    margin: 10px 0; /* Increased margin between options */
+    
+    }
+
+    .correct-option {
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .button {
+      background-color: #04AA6D;
+      color: #FFFFFF;
+      margin: 8px 0;
+      padding: 6px 8px;
+      border: none;
+      cursor: pointer;
+      opacity: 0.9;
+      background-color: #0E7C58; /* Darker green for button */
+    }
+
+    .button:hover {
+      opacity: 5;
+    }
+
+    #quizId  {
+      padding: 10px;
+      margin: 5px 0 22px 0;
+      display: inline-block;
+      border: none;
+      background: #292929; /* Darker background color */
+      color: #FFFFFF; /* Light text color */
+    }
+
+    h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Light text shadow */
+    text-decoration:line-through;
+}
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <h1>⚛ K 2 K ⚛</h1>
+    <label for="userName">Enter Your Name:</label>
+    <input type="text" id="userName" placeholder="Your Name">
+    <label for="quizId">Enter Quiz ID:</label>
+    <input type="text" id="quizId" placeholder="Quiz ID">
+    <button id="startQuiz" class="button">Start Quiz</button>
+    <div id="quizContainer" class="hidden">
+      <h2 id="quizName"></h2>
+      <p id="quizDesc"></p>
+      <div id="questionContainer"></div>
+      <div id="result" class="hidden">
+        <p></p>
+      </div>
+    </div>
+    <div id="finalScoreContainer" class="hidden">
+      <p id="finalScore"></p>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const quizIdInput = document.getElementById('quizId');
+      
+      const userNameInput = document.getElementById('userName');
+      const startQuizButton = document.getElementById('startQuiz');
+      const quizContainer = document.getElementById('quizContainer');
+      const finalScoreContainer = document.getElementById('finalScoreContainer'); // New
+      const quizNameElement = document.getElementById('quizName');
+      const quizDescElement = document.getElementById('quizDesc');
+      const questionContainer = document.getElementById('questionContainer');
+      const resultContainer = document.getElementById('result');
+      let finalScoreDisplayed = false; // Keep track of whether final score is displayed
+
+      startQuizButton.addEventListener('click', async () => {
+        if (finalScoreDisplayed) {
+          finalScoreContainer.classList.add('hidden'); // Hide final score if displayed
+        }
+
+        const quizId = quizIdInput.value;
+        const id = quizIdInput.value;
+        const userName = userNameInput.value;
+        const apiUrl = `http://localhost:3000/api/quizzes/${quizId}`;
+
+        try {
+          const response = await fetch(apiUrl);
+          const data = await response.json();
+
+          if (!data || !data.quiz || !data.questions) {
+            alert('Quiz not available.');
+            return;
+          }
+
+          quizNameElement.textContent = data.quiz.quiz_name;
+          quizDescElement.textContent = data.quiz.quiz_desc;
+          quizContainer.classList.remove('hidden');
+
+          startQuiz(data.questions, userName ,quizId);
+        } catch (error) {
+          console.error(error);
+          alert('Error fetching quiz data.');
+        }
+      });
+
+      function startQuiz(questions, userName, quizId) {
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function displayQuestion() {
+          if (currentQuestionIndex < questions.length) {
+            const questionData = questions[currentQuestionIndex];
+            const optionsHtml = `
+              <h3>Question ${currentQuestionIndex + 1}:</h3>
+              <p>${questionData.question}</p>
+              <ul>
+                <li><label class="option-label option-1"><input type="checkbox" name="options" value="1">${questionData.option_1}</label></li><br><br>
+                <li><label class="option-label option-2"><input type="checkbox" name="options" value="2">${questionData.option_2}</label></li><br><br>
+                ${questionData.option_3 ? `<li><label class="option-label option-3"><input type="checkbox" name="options" value="3">${questionData.option_3}</label></li><br><br>` : ''}
+                ${questionData.option_4 ? `<li><label class="option-label option-4"><input type="checkbox" name="options" value="4">${questionData.option_4}</label></li><br><br>` : ''}
+              </ul>
+            `;
+            questionContainer.innerHTML = optionsHtml;
+
+
+            let countdown = 3; // 30 seconds countdown
+            const timerElement = document.createElement('p');
+            timerElement.id = 'timer';
+            questionContainer.appendChild(timerElement);
+
+            const timerInterval = setInterval(() => {
+              timerElement.textContent = `Time left: ${countdown} seconds`;
+              countdown--;
+            }, 1000); // Update timer every second
+
+            
+            setTimeout(showResult, 3000); // 30 seconds timer
+          } else {
+            showFinalScore(userName,quizId);
+          }
+        }
+
+        // function showResult() {
+        //   const questionData = questions[currentQuestionIndex];
+        //   const selectedOptions = document.querySelectorAll('input[name="options"]:checked');
+        //   let selectedOptionIsCorrect = false;
+
+        //   if (selectedOptions.length > 0) {
+        //     selectedOptions.forEach(option => {
+        //       const optionIndex = option.value;
+        //       if (questionData[`option_${optionIndex}_is_correct`] === '1') {
+        //         selectedOptionIsCorrect = true;
+        //         score++;
+        //       }
+        //     });
+        //   }
+
+        //   resultContainer.textContent = selectedOptionIsCorrect ? 'Correct!' : 'Wrong!';
+        //   resultContainer.classList.remove('hidden');
+        //   currentQuestionIndex++;
+
+        //   setTimeout(() => {
+        //     resultContainer.classList.add('hidden');
+        //     displayQuestion();
+        //   }, 2000); // 2 seconds delay before next question
+        // }
+
+        function showResult(selected) {
+          const questionData = questions[currentQuestionIndex];
+          const selectedOptions = document.querySelectorAll('input[name="options"]:checked');
+          let allSelectedOptionsCorrect = true;
+
+          if (selectedOptions.length > 0) {
+            selectedOptions.forEach(option => {
+              const optionIndex = option.value;
+              if (questionData[`option_${optionIndex}_is_correct`] !== '1') {
+                allSelectedOptionsCorrect = false;
+              }
+            });
+          } else {
+            allSelectedOptionsCorrect = false;
+          }
+if (allSelectedOptionsCorrect)score++;
+          resultContainer.textContent = allSelectedOptionsCorrect ? 'Correct!' : 'Wrong!';
+          resultContainer.classList.remove('hidden');
+          currentQuestionIndex++;
+
+          setTimeout(() => {
+            resultContainer.classList.add('hidden');
+            displayQuestion();
+          }, 2000); // 2 seconds delay before next question
+        }
+
+
+
+        function showFinalScore(userName, quizId ) {
+            // id= quizId;
+          quizContainer.classList.add('hidden');
+          finalScoreContainer.classList.remove('hidden'); // Show the final score container
+          finalScoreContainer.innerHTML = `<p>${userName}, Your Final Score: <span>${score} </span></p>`;
+          finalScoreDisplayed = true; // Set finalScoreDisplayed to true
+
+
+          const resultData = {
+    quizId: quizId,
+    userName: userName,
+    score: score,
+  };
+
+  fetch('http://localhost:3000/api/submitResult', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(resultData),
+  })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+
+        }
+
+
+        
+        
+        displayQuestion();
+      }
+    });
+
+  </script>
+</body>
+</html>

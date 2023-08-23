@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Taker</title>
+    <style>
+body {
+      margin: 0;
+      padding: 0;
+      background-size: 400% 400%;
+      animation: gradientShift 10s infinite;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background-color: darkslategray;
+      color: #FFFFFF;
+      background-image: url('livingroom.jpg');
+      background-size: cover;
+      backdrop-filter: blur(8px); /* Apply the blur effect to the background */
+    }
+.button {
+    background-color: #11e62d;
+    color: #FFFFFF;
+    margin: 8px 0;
+    padding: 16px 18px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.9;
+    background-color: #022217; /* Darker green for button */
+}
+
+.button:hover {
+    opacity: 5;
+}
+
+    </style>
+</head>
+<body>
+    <h1>The Live Quizes will be shown here 👇</h1>
+    
+    <button id="liveButton" class="button" style="background-color: green;"><a href="/quiztake" style="color: #FFFFFF; text-decoration: none;"> Enter Room</a></button>
+
+    <script>
+        const isLive = localStorage.getItem("isLive");
+
+        if (isLive === "true") {
+            document.getElementById("liveButton").style.display = "inline-block";
+        } else {
+            document.getElementById("liveButton").style.display = "none";
+        }
+    </script>
+</body>
+</html>
